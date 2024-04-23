@@ -157,6 +157,7 @@ Supported options for the `language` setting:
 - `fa` Persian
 - `fi` Finnish
 - `fr` French
+- `gl` Galician
 - `he` Hebrew
 - `hr` Croatian
 - `hu` Hungarian
