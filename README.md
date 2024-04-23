@@ -154,6 +154,7 @@ Supported options for the `language` setting:
 - `en` English
 - `es` Spanish
 - `et` Estonian
+- `fa` Persian
 - `fi` Finnish
 - `fr` French
 - `he` Hebrew
