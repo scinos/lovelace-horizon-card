@@ -21,6 +21,7 @@ export class HorizonCardFooter {
   private readonly azimuthExtraClasses: string[]
   private readonly elevations
   private readonly elevationExtraClasses: string[]
+  private readonly southern_flip: boolean
 
   constructor (config: IHorizonCardConfig, data: THorizonCardData, i18n: I18N) {
     this.data = data
@@ -56,22 +57,38 @@ export class HorizonCardFooter {
     } else {
       this.elevationExtraClasses = []
     }
+
+    this.southern_flip = config.southern_flip!
   }
 
   public render (): TemplateResult {
+    const dawn = this.fields.dawn
+      ? HelperFunctions.renderFieldElement(this.i18n, EHorizonCardI18NKeys.Dawn, this.sunTimes.dawn)
+      : nothing
+    const dusk = this.fields.dusk
+      ? HelperFunctions.renderFieldElement(this.i18n, EHorizonCardI18NKeys.Dusk, this.sunTimes.dusk)
+      : nothing
+    const sunLeft = this.southern_flip ? dusk : dawn
+    const sunRight = this.southern_flip ? dawn : dusk
+
+    const moonrise = this.fields.moonrise
+      ? HelperFunctions.renderFieldElement(this.i18n, EHorizonCardI18NKeys.Moonrise, this.moonTimes.moonrise)
+      : nothing
+    const moonset = this.fields.moonset
+      ? HelperFunctions.renderFieldElement(this.i18n, EHorizonCardI18NKeys.Moonset, this.moonTimes.moonset)
+      : nothing
+    const moonLeft = this.southern_flip ? moonset : moonrise
+    const moonRight = this.southern_flip ? moonrise : moonset
+
     return html`
       <div class="horizon-card-footer">
         ${
           this.renderRow(
-            this.fields.dawn
-              ? HelperFunctions.renderFieldElement(this.i18n, EHorizonCardI18NKeys.Dawn, this.sunTimes.dawn)
-              : nothing,
+            sunLeft,
             this.fields.noon
               ? HelperFunctions.renderFieldElement(this.i18n, EHorizonCardI18NKeys.Noon, this.sunTimes.noon)
               : nothing,
-            this.fields.dusk
-              ? HelperFunctions.renderFieldElement(this.i18n, EHorizonCardI18NKeys.Dusk, this.sunTimes.dusk)
-              : nothing
+            sunRight
           )
         }
         ${
@@ -88,15 +105,11 @@ export class HorizonCardFooter {
         }
         ${
           this.renderRow(
-            this.fields.moonrise
-              ? HelperFunctions.renderFieldElement(this.i18n, EHorizonCardI18NKeys.Moonrise, this.moonTimes.moonrise)
-              : nothing,
+            moonLeft,
             this.fields.moon_phase
               ? HelperFunctions.renderMoonElement(this.i18n, this.data.moonData.phase, this.data.moonData.phaseRotation)
               : nothing,
-            this.fields.moonset
-              ? HelperFunctions.renderFieldElement(this.i18n, EHorizonCardI18NKeys.Moonset, this.moonTimes.moonset)
-              : nothing
+            moonRight
           )
         }
       </div>
